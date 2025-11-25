@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 
-size_t __strlen_sse(const char *); // your asm symbol
+size_t __strlen_avx512(const char *); // your asm symbol
 
 int page_overlap() {
   size_t page = sysconf(_SC_PAGESIZE);
@@ -30,7 +30,7 @@ int page_overlap() {
 
     printf("str @ %p\n", (void *)str);
 
-    size_t n = __strlen_sse(str);
+    size_t n = __strlen_avx512(str);
     printf("len = %zu\n", n);
   }
 
@@ -45,7 +45,7 @@ int page_overlap() {
 
     printf("str @ %p\n", (void *)str);
 
-    size_t n = __strlen_sse(str);
+    size_t n = __strlen_avx512(str);
     printf("big len = %zu\n", n);
   }
 
@@ -65,7 +65,7 @@ static void test_basic(void) {
   for (int i = 0; tests[i]; ++i) {
     const char *s = tests[i];
     size_t glibc_len = strlen(s);
-    size_t avx_len = __strlen_sse(s);
+    size_t avx_len = __strlen_avx512(s);
     printf("  \"%s\": glibc=%zu, avx=%zu", s, glibc_len, avx_len);
     if (glibc_len != avx_len) {
       printf("  <-- MISMATCH\n");
