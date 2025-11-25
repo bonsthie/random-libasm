@@ -78,7 +78,7 @@ endstruc
 	jz			%%.end
 
 	or			r8b, CPU_INFO_BIT(%1, %2)
-	Mov			byte CPU_INFO(%1), r8b
+	mov			byte CPU_INFO(%1), r8b
 
 %%.end:
 %endmacro
@@ -102,7 +102,7 @@ endstruc
 
 	xor		esi,esi
 	HAS_CPU_FEAT %1, %2
-	setnz	sil
+	setnz	dil
 	call	__print_yes_or_no
 %endmacro
 

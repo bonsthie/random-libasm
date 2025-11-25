@@ -29,10 +29,13 @@ __get_cpu_feature:
 	DETECT_CPU_FEAT	AVX, 2,	ebx
 	DETECT_CPU_FEAT	AVX512, F, ebx
 
+%ifdef VERBOSE
 	call __print_cpu_feature
+%endif
 	pop rbx
 	ret
 
+%ifdef VERBOSE
 __print_cpu_feature:
 	PRINT_HAS_CPU_FEAT SSE, 1
 	PRINT_HAS_CPU_FEAT SSE, 2
@@ -43,17 +46,17 @@ __print_cpu_feature:
 	ret
 
 ; void print_yes_or_no(bool yes);
-; rsi -> 1 or 0
+; rdi -> 1 or 0
 __print_yes_or_no:
-	test	esi, esi
+	test	edi, edi
 	jz		.no
-	lea		rsi,  [rel yes_msg]
+	lea		rsi, [rel yes_msg]
 	mov		edx, yes_len
 	jmp		.end
 
 .no:
-	lea		rsi,  [rel no_msg]
-	mov		edx,no_len
+	lea		rsi, [rel no_msg]
+	mov		edx, no_len
 
 .end:
 	mov		edi, 1
@@ -75,6 +78,7 @@ yes_len         equ $ - yes_msg
 
 no_msg:         db "no", 10, 0
 no_len          equ $ - no_msg
+%endif
 
 section .init_array
 align 8
