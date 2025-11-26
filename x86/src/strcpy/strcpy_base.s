@@ -15,7 +15,7 @@ __strcpy_base:
 	mov		byte [rdi], dl
 	inc		rsi
 	inc		rdi
-	jmp		.end
+	jmp		.loop
 
 .end:
 	mov		byte [rdi], 0

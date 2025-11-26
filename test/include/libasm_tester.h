@@ -21,4 +21,10 @@ void run_tests(test_entry *tests, void(tester)(void *), int(is_runable)(int));
 typedef size_t (*strlen_proto)(const char *str);
 void strlen_test(void *func);
 
+typedef int (*strcmp_proto)(const char *s1, const char *s2);
+void strcmp_test(void *func);
+
+typedef char *(*strcpy_proto)(char *dst, const char *src);
+void strcpy_test(void *func);
+
 #endif // __LIBASM_TESTER_H__
