@@ -1,7 +1,41 @@
-#include <test_template.h>
-#include <string.h>
 
+#define _GNU_SOURCE
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <test_template.h>
 #include <libasm_tester.h>
+
+void strlen_page_overlap(strlen_proto strlen_tested) {
+  size_t page = sysconf(_SC_PAGESIZE);
+
+  // Map two pages: [page0][page1]
+  char *p = mmap(NULL, 2 * page, PROT_READ | PROT_WRITE,
+                 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+  if (p == MAP_FAILED) {
+    perror("mmap");
+    return;
+  }
+
+  if (mprotect(p + page, page, PROT_NONE)) {
+    perror("mprotect");
+    return;
+  }
+
+  char *str = p + page - 8;
+  memcpy(str, "AAAAAA\0", 7);
+  BASIC_TEST("page overlap on the first 16 byte and end in the first page", strlen_tested, 6, str);
+
+  if (mprotect(p + page, page, PROT_READ | PROT_WRITE)) {
+    perror("mprotect");
+    return;
+  }
+
+  memcpy(str, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\0", 100);
+  BASIC_TEST("page overlap on the first 16 byte but that continue", strlen_tested, 99, str);
+}
 
 void strlen_test(void *func) {
   strlen_proto strlen_tested = func;
@@ -22,7 +56,11 @@ void strlen_test(void *func) {
   BASIC_TEST("very very long string string", strlen_tested, 100000, STR_100000_a);
   BASIC_TEST("UTF-8 multibyte characters (é)", strlen_tested, 2, "é");                                 // multibyte: 0xC3 0xA9
   BASIC_TEST("UTF-8 emoji (😀)", strlen_tested, 4, "😀"); // emoji is 4 bytes
+
+  strlen_page_overlap(strlen_tested);
 }
+
+
 
 void strcmp_test(void *func) {
   strcmp_proto strcmp_tested = func;
