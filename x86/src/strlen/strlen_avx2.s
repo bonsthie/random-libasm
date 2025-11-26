@@ -21,7 +21,6 @@ __strlen_avx2:
 	mov			ecx, edi
 	and			ecx, PAGE_SIZE - 1
 	cmp			ecx, PAGE_SIZE - VEC_SIZE   ; in last 31 bytes?
-
 	ja			.near_page_end  
 
 	; miss aligment offset in rcx

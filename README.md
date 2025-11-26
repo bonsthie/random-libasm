@@ -5,20 +5,21 @@ my first time writing nasm asm (i'm a clang kind of guy) and first time really w
 ## SUPPORTED ARCH
 
 ### X86-64
+- [x] tester
 - [x] cpuid info in .init_array
-- [ ] ifunc selector
-- [ ] strlen
+- [x] ifunc selector (forked nasm need to do a pull request)
+- [x] strlen
     - [x] base
     - [x] sse2
     - [x] avx2
-    - [ ] avx512
+    - [x] avx512
 - [ ] strcmp
     - [x] base
     - [ ] sse2
     - [ ] avx2
     - [ ] avx512
 - [ ] strlcpy
-    - [ ] base
+    - [x] base
     - [ ] sse2
     - [ ] avx2
     - [ ] avx512

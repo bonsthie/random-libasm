@@ -15,3 +15,4 @@ __strlen_base:
 
 .end:
 	sub	rax, rdi
+	ret
