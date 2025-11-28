@@ -51,29 +51,18 @@ strcmp:
 .Lno_page_cross:
 
  vmovdqu (%rdi), %ymm0
-
-
-
  vpcmpeqb (%rsi), %ymm0, %ymm1
-
  vpcmpeqb %ymm0, %ymm15, %ymm2
-
  vpandn %ymm1, %ymm2, %ymm1
-
-
  vpmovmskb %ymm1, %ecx
-# 304 "strcmp-avx2.S"
  incl %ecx
  jz .Lmore_3x_vec
 
  .p2align 4,, 4
 .Lreturn_vec_0:
  tzcntl %ecx, %ecx
-# 319 "strcmp-avx2.S"
  movzbl (%rdi, %rcx), %eax
  movzbl (%rsi, %rcx), %ecx
-
-
  subl %ecx, %eax
 
 .Lret0:
@@ -165,28 +154,12 @@ strcmp:
 
 
 .Lprepare_loop:
-
-
-
-
-
-
 .Lprepare_loop_no_len:
-
-
  subq %rdi, %rsi
  andq $-(32 * 4), %rdi
  addq %rdi, %rsi
 
-
-
-
-
 .Lprepare_loop_aligned:
-
-
-
-
  movl $-(32 * 4), %eax
  subl %esi, %eax
  andl $(4096 - 1), %eax
@@ -194,13 +167,6 @@ strcmp:
 
  .p2align 4
 .Lloop:
-
-
-
-
-
-
-
  subq $-(32 * 4), %rdi
  subq $-(32 * 4), %rsi
 
@@ -221,19 +187,13 @@ strcmp:
  vpcmpeqb (32 * 2)(%rsi), %ymm4, %ymm5
  vpcmpeqb (32 * 3)(%rsi), %ymm6, %ymm7
 
-
-
  vpand %ymm0, %ymm1, %ymm1
-
-
  vpand %ymm2, %ymm3, %ymm3
  vpand %ymm4, %ymm5, %ymm5
  vpand %ymm6, %ymm7, %ymm7
 
  vpminub %ymm1, %ymm3, %ymm3
  vpminub %ymm5, %ymm7, %ymm7
-
-
  vpminub %ymm3, %ymm7, %ymm7
 
 
@@ -513,9 +473,6 @@ strcmp:
  .p2align 4,, 10
 .Lpage_cross:
 
-
-
-
  testl $((32 - 1) << 20), %eax
  jz .Lno_page_cross
 
@@ -555,34 +512,18 @@ strcmp:
  vpandn %ymm1, %ymm2, %ymm1
  vpmovmskb %ymm1, %ecx
  incl %ecx
-
  jnz .Lcheck_ret_vec_page_cross
+
  addl $32, %edx
-
-
-
-
  addl $32, %eax
  jl .Lpage_cross_loop
 
  subl %eax, %edx
-
-
-
-
-
  vmovdqu (%rdi, %rdx), %ymm0
  vpcmpeqb (%rsi, %rdx), %ymm0, %ymm1
  vpcmpeqb %ymm0, %ymm15, %ymm2
  vpandn %ymm1, %ymm2, %ymm1
  vpmovmskb %ymm1, %ecx
-
-
-
-
-
-
-
  incl %ecx
  jz .Lprepare_loop_no_len
 
