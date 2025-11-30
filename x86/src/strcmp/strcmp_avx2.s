@@ -34,40 +34,39 @@ __strcmp_avx2:
 	and			rdx, VEC_SIZE - 1
 	jnz			.align_rdi_string_no_page_cross
 
+
+; in this loop  rdi is align
 .loop_align_4x:
-	vmovdqa		ymm1, [rdi]
-	vpcmpeqb	ymm2, ymm1, [rsi]
-	vpcmpeqb	ymm3, ymm1, ymm0
-	vpand		ymm2, ymm2, ymm3
-	vpmovmsk	ecx, ymm1
-
-	add			rdi, VEC_SIZE
-	add			rsi,VEC_SIZEdx
-	inc			ecx
-	jnz			.end
-
-.loop_align_3x:
 	vmovdqa		ymm1, [rdi + (VEC_SIZE * 0)]
 	vmovdqa		ymm2, [rdi + (VEC_SIZE * 1)]
 	vmovdqa		ymm3, [rdi + (VEC_SIZE * 2)]
+	vmovdqa		ymm4, [rdi + (VEC_SIZE * 3)]
 
-	vpcmpeq		ymm4, ymm1, [rsi + (VEC_SIZE * 0)]
-	vpcmpeq		ymm5, ymm2, [rsi + (VEC_SIZE * 1)]
-	vpcmpeq		ymm6, ymm3, [rsi + (VEC_SIZE * 2)]
+	vpcmpeq		ymm5, ymm1, [rsi + (VEC_SIZE * 0)]
+	vpcmpeq		ymm6, ymm2, [rsi + (VEC_SIZE * 1)]
+	vpcmpeq		ymm7, ymm3, [rsi + (VEC_SIZE * 2)]
+	vpcmpeq		ymm8, ymm4, [rsi + (VEC_SIZE * 3)]
 
 	; looking for '\0'
-	vpand		ymm4, ymm1, ymm4
-	vpand		ymm5, ymm2, ymm5
-	vpand		ymm6, ymm3, ymm6
+	vpand		ymm5, ymm1, ymm5
+	vpand		ymm6, ymm2, ymm6
+	vpand		ymm7, ymm3, ymm7
+	vpand		ymm8, ymm3, ymm8
 
 	; fuse all the vector by taking the lowest value of each byte
-	vpminub		ymm7, ymm4, ymm5
-	vpminub		ymm7, ymm7, ymm6
+	vpminub		ymm9, ymm5, ymm6
+	vpminub		ymm9, ymm9, ymm7
+	vpminub		ymm9, ymm9, ymm8
 
 	vpcmpeq		ymm7, ymm7, ymm0
 	vpmovmsk	ecx, ymm7
 	inc			ecx
-	jz			.loop_align_4x
+	jnz			.ret
+
+	add			rdi, VEC_SIZE * 4
+	add			rsi, VEC_SIZE * 4
+
+
 .ret:
 	...
 
