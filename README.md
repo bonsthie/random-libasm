@@ -7,20 +7,23 @@ my first time writing nasm asm (i'm a clang kind of guy) and first time really w
 ### X86-64
 - [x] tester
 - [x] cpuid info in .init_array
-- [x] ifunc selector (fork of nasm need to do a pull request)
+- [x] ifunc selector (fork of nasm is curently evalueted)
 - [ ] strlen
+    - [x] test
     - [ ] ifunc
     - [x] base
     - [x] sse2
     - [x] avx2
     - [x] avx512
 - [ ] strcmp
+    - [x] test
     - [ ] ifunc
     - [x] base
     - [ ] sse2
     - [ ] avx2
     - [ ] avx512
 - [ ] strlcpy
+    - [x] test
     - [ ] ifunc
     - [x] base
     - [ ] sse2
