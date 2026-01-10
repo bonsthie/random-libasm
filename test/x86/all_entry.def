@@ -1,0 +1,4 @@
+
+#include "string_entry.def"
+
+#undef ENTRY

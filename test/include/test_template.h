@@ -1,8 +1,11 @@
 #ifndef __TEST_TEMPALTE_H__
 #define __TEST_TEMPALTE_H__
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+bool tester_is_verbose(void);
 
 #define RED "\033[31m"
 #define GREEN "\033[32m"
@@ -19,8 +22,11 @@
         int result = func(args);                                                                   \
         if (cmp_res_func(expected, result))                                                        \
         {                                                                                          \
-            printf(GREEN "[PASS]" RESET " %s => expected: %d, got: %d\n", description, expected,   \
-                   result);                                                                        \
+            if (tester_is_verbose())                                                               \
+            {                                                                                      \
+                printf(GREEN "[PASS]" RESET " %s => expected: %d, got: %d\n", description, expected, \
+                       result);                                                                    \
+            }                                                                                      \
         } else                                                                                     \
         {                                                                                          \
             printf(RED "[FAIL]" RESET " %s => expected: %d, got: %d\n", description, expected,     \
