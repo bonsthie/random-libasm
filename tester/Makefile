@@ -5,17 +5,13 @@ LIBASM_PATH ?= ../libasm.a
 OBJ_DIR=obj
 SRC=$(shell find base $(ARCH) -name '*.c')
 OBJ = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
-
-$(info src = $(SRC))
-$(info obj = $(OBJ))
-
 CC = clang
 CFLAG=-Wall -Wextra -Werror -O0 -g
 INC=-I include
 
-all : run
+all : $(NAME) run
 
-run: $(NAME)
+run:
 	./$(NAME)
 
 $(NAME): $(OBJ)

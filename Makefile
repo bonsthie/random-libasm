@@ -5,7 +5,7 @@ ARCH=x86
 SRC_DIR=$(ARCH)/src
 OBJ_DIR=obj/$(ARCH)
 INC_DIR=$(ARCH)/include
-TEST_DIR=test
+TEST_DIR=tester
 
 SRC=$(shell find $(SRC_DIR) -name '*.s')
 OBJ = $(patsubst $(SRC_DIR)/%.s, $(OBJ_DIR)/%.o, $(SRC))
@@ -32,7 +32,9 @@ fclean: clean
 re: fclean all
 
 test: $(NAME)
-	make -C $(TEST_DIR) -s
+	@make -C $(TEST_DIR) -s 
 
+run_test:
+	@make run -C $(TEST_DIR) -s
 
 .PHONY: all clean fclean re

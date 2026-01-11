@@ -1,16 +1,28 @@
 #include "libasm_tester.h"
+#include <colors.h>
 #include <stdio.h>
 
-static const tester_config g_tester_config = {
-    .verbose = true,
+tester_config g_tester_config = {
+    .verbose = false,
     .arch_version = TESTER_ARCH_VERSION_ALL,
+
 };
 
-const tester_config *tester_get_config(void) { return &g_tester_config; }
+tester_config *tester_get_config(void) { return &g_tester_config; }
 
 bool tester_is_verbose(void) {
   const tester_config *config = tester_get_config();
   return config && config->verbose;
+}
+
+void test_success() {
+  tester_config *config = tester_get_config();
+  config->test_success++;
+}
+
+void test_fail() {
+  tester_config *config = tester_get_config();
+  config->test_success++;
 }
 
 void run_tests(test_entry *tests, void(tester)(void *), int(is_runable)(int)) {
@@ -24,15 +36,11 @@ void run_tests(test_entry *tests, void(tester)(void *), int(is_runable)(int)) {
     }
 
     if (!is_runable(t->version_id)) {
-      if (tester_is_verbose()) {
-        printf("\nskiping test for %s\n", t->name);
-      }
+      printf("[" YELLOW "SKIPPING" RESET "] %s\n", t->name);
       continue;
     }
 
-    if (tester_is_verbose()) {
-      printf("\ntesting %s\n", t->name);
-    }
+    printf("[" LGREEN "TESTING" RESET "]  %s\n", t->name);
     tester(t->func);
   }
 }

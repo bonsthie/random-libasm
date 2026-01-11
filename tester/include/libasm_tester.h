@@ -15,6 +15,9 @@ typedef struct {
 
   // use to run only a specific version EX AVX SSE2..
   int arch_version;
+
+  int test_success;
+  int test_fail;
 } tester_config;
 
 typedef void (*test_func)();
@@ -28,11 +31,14 @@ typedef void (*test_func)();
    .name = F_##version##_NAME(function),                                       \
    .version_id = SIMD_LVL_##version}
 
-void run_tests(test_entry *tests, void(tester)(void *), int(is_runable)(int));
+void run_tests(test_entry *tests, void (tester)(void *), int(is_runable)(int));
 
 void tester_set_config(const tester_config *config);
-const tester_config *tester_get_config(void);
+tester_config *tester_get_config(void);
 bool tester_is_verbose(void);
+
+void test_success();
+void test_fail();
 
 typedef size_t (*strlen_proto)(const char *str);
 void strlen_test(void *func);

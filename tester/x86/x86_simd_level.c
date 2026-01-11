@@ -41,6 +41,8 @@ static x86_simd_support_t x86_detect_cpu_features() {
 	return x86_simd_support;
 }
 
+#ifdef DEBUG
+
 void x86_print_features() {
     printf("simd support %d\n", x86_simd_support.cpu_id);
     if (x86_simd_support.mmx) printf("-mmmx ");
@@ -65,9 +67,13 @@ void x86_print_features() {
     printf("\n");
 }
 
+#endif
+
 void __attribute__((constructor)) x86_init_simd_support(void) {
     x86_detect_cpu_features();
-    x86_print_features();
+#ifdef DEBUG
+	x86_print_features();
+#endif
 }
 
 
