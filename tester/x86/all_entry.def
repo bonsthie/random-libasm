@@ -1,5 +1,13 @@
+#ifndef ENTRY
+#define ENTRY(x) 
+#endif
+
+#ifndef GROUPS_ENTRY
+#define GROUPS_ENTRY(x)
+#endif
 
 #include "string_entry.def"
 #include "io_entry.def"
 
 #undef ENTRY
+#undef GROUPS_ENTRY

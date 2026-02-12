@@ -38,5 +38,6 @@ void x86_strcpy_test() {
 
 void x86_string_test() {
 #define ENTRY(x) X86_ENTRY(x)();
+#define GROUPS_ENTRY(x)
 #include "string_entry.def"
 }
