@@ -2,7 +2,7 @@
 #include <colors.h>
 #include <stdio.h>
 
-tester_config g_tester_config = {
+static tester_config g_tester_config = {
     .verbose = true,
     .arch_version = TESTER_ARCH_VERSION_ALL,
 

@@ -9,7 +9,7 @@ bool tester_is_verbose(void);
 #ifdef NO_TEST_EXIT
 #define TEST_EXIT
 #else
-#define TEST_EXIT exit(1);
+#define TEST_EXIT _exit(1);
 #endif
 
 #define TEST(description, func, cmp_res_func, expected, args...)               \
