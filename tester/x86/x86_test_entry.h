@@ -7,5 +7,6 @@
 void run_test_from_name(const char *s);
 
 void x86_string_test();
+void x86_io_test();
 
 #endif // X86_TEST_ENTRY

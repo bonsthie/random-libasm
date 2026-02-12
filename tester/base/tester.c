@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 tester_config g_tester_config = {
-    .verbose = false,
+    .verbose = true,
     .arch_version = TESTER_ARCH_VERSION_ALL,
 
 };
@@ -43,4 +43,9 @@ void run_tests(test_entry *tests, void(tester)(void *), int(is_runable)(int)) {
     printf("[" LGREEN "TESTING" RESET "]  %s\n", t->name);
     tester(t->func);
   }
+}
+
+void run_test(char *name, void *func, void(tester)(void *)) {
+  printf("[" LGREEN "TESTING" RESET "]  %s\n", name);
+  tester(func);
 }

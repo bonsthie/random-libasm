@@ -1,7 +1,7 @@
 extern __errno_location
 
 %macro SYSCALL_RET 0
-    cmp     rax, -4095
+    cmp     rax, -1
     jle     %%error
     ret
 

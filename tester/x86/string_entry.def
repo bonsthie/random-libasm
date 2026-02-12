@@ -1,5 +1,4 @@
 
-
 ENTRY(strlen)
 ENTRY(strcmp)
 ENTRY(strcpy)

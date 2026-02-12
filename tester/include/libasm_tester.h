@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 
 typedef struct {
   const char *name;
@@ -32,6 +33,7 @@ typedef void (*test_func)();
    .version_id = SIMD_LVL_##version}
 
 void run_tests(test_entry *tests, void (tester)(void *), int(is_runable)(int));
+void run_test(char *name, void *func, void(tester)(void *));
 
 void tester_set_config(const tester_config *config);
 tester_config *tester_get_config(void);
@@ -48,5 +50,11 @@ void strcmp_test(void *func);
 
 typedef char *(*strcpy_proto)(char *dst, const char *src);
 void strcpy_test(void *func);
+
+typedef ssize_t (*write_proto)(int fildes, const void *buf, size_t nbyte);
+void write_test(void *func);
+
+typedef ssize_t (*read_proto)(int fildes, void *buf, size_t nbyte);
+void read_test(void *func);
 
 #endif // __LIBASM_TESTER_H__

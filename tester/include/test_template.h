@@ -1,10 +1,8 @@
 #ifndef __TEST_TEMPALTE_H__
 #define __TEST_TEMPALTE_H__
 
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <colors.h>
+#include <stdbool.h>
 
 bool tester_is_verbose(void);
 
@@ -16,17 +14,18 @@ bool tester_is_verbose(void);
 
 #define TEST(description, func, cmp_res_func, expected, args...)               \
   {                                                                            \
-    int result = func(args);                                                   \
-    if (cmp_res_func(expected, result)) {                                      \
+    long __expected = (long)expected;                                          \
+    long result = (long)func(args);                                            \
+    if (cmp_res_func((long)expected, (long)result)) {                          \
       test_success();                                                          \
       if (tester_is_verbose()) {                                               \
-        printf(GREEN "[PASS]" RESET " %s => expected: %d, got: %d\n",          \
-               description, expected, result);                                 \
+        printf(GREEN "[PASS]" RESET " %s => expected: %ld, got: %ld\n",        \
+               description, __expected, result);                                 \
       }                                                                        \
     } else {                                                                   \
       test_fail();                                                             \
-      printf(RED "[FAIL]" RESET " %s => expected: %d, got: %d\n", description, \
-             expected, result);                                                \
+      printf(RED "[FAIL]" RESET " %s => expected: %ld, got: %ld\n",            \
+             description, __expected, result);                                   \
       TEST_EXIT                                                                \
     }                                                                          \
   }
@@ -34,6 +33,7 @@ bool tester_is_verbose(void);
 #define BASIC_CMP_RES_FUNC(res, func_res) (res == func_res)
 #define BASIC_CMP_RES_FUNC_ADDR(res, func_res) (res == &func_res)
 #define BASIC_CMP_RES_FUNC_PTR_VALUE(res, func_res) (res == *func_res)
+#define ERRNO_CMP(expected, _) (expected == errno)
 
 #define BASIC_TEST_ADDRESS(description, func, ret, args...)                    \
   TEST(description, func, BASIC_CMP_RES_FUNC_ADDR, ret, args)
@@ -43,6 +43,9 @@ bool tester_is_verbose(void);
 
 #define BASIC_TEST(description, func, ret, args...)                            \
   TEST(description, func, BASIC_CMP_RES_FUNC, ret, args)
+
+#define TEST_ERRNO(description, func, errno_value, args...)                    \
+  (description, func, ERRNO_CMP, ret, args)
 
 #define STR_1000_a                                                             \
   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \

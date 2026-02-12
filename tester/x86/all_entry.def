@@ -1,4 +1,5 @@
 
 #include "string_entry.def"
+#include "io_entry.def"
 
 #undef ENTRY

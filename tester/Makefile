@@ -6,7 +6,7 @@ OBJ_DIR=obj
 SRC=$(shell find base $(ARCH) -name '*.c')
 OBJ = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
 CC = clang
-CFLAG=-Wall -Wextra -Werror -O0 -g
+CFLAG=-Wall -Wextra -Werror -O0 -g -DNO_TEST_EXIT
 INC=-I include
 
 all : $(NAME) run
