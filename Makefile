@@ -11,7 +11,16 @@ SRC=$(shell find $(SRC_DIR) -name '*.s')
 OBJ = $(patsubst $(SRC_DIR)/%.s, $(OBJ_DIR)/%.o, $(SRC))
 
 AS=nasm
-AS_FLAG=-f elf64 -DVERBOSE
+
+AS_FLAGS=-f elf64
+
+ifeq ($(ENABLE_IFUNC), true)
+	AS_FLAGS += -D__IFUNC_ENABLE
+endif
+
+ifeq ($(VERBOSE), true)
+	AS_FLAGS += -DVERBOSE
+endif
 
 all : $(NAME)
 
@@ -20,7 +29,7 @@ $(NAME): $(OBJ)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 	mkdir -p $(@D)
-	$(AS) $(AS_FLAG) -I $(INC_DIR) $< -o $@
+	$(AS) $(AS_FLAGS) -I $(INC_DIR) $< -o $@
 
 clean:
 	rm -rf $(OBJ_DIR)
@@ -32,9 +41,9 @@ fclean: clean
 re: fclean all
 
 test: $(NAME)
-	@make -C $(TEST_DIR) -s 
+	@make -C $(TEST_DIR) -s ARGS=$(ARGS)
 
 run_test:
-	@make run -C $(TEST_DIR) -s
+	@make run -C $(TEST_DIR) -s ARGS=$(ARGS)
 
 .PHONY: all clean fclean re

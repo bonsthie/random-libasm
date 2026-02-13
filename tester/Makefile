@@ -11,10 +11,10 @@ INC=-I include
 
 all : $(NAME) run
 
-run:
-	./$(NAME)
+run: $(NAME)
+	./$(NAME) $(ARGS)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) $(LIBASM_PATH)
 	$(CC) -o $@ $(OBJ) $(LIBASM_PATH)
 
 $(OBJ_DIR)/%.o: %.c

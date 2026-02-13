@@ -7,6 +7,8 @@
 ; It removes the entries I don't need and keeps the representation simpler
 ; than the full CPUID leaf system and its unusual ordering.
 
+extern __cpu_info
+
 struc cpu_info_s
 	.SSE resb 1
 	.AVX resb 1
@@ -116,3 +118,38 @@ endstruc
 %endmacro
 
 
+; if there is ifunc in this version of nasm
+;	this ret the func version
+; else
+;	jmp call to it
+; 1 -> func
+%ifdef __IFUNC_ENABLE
+
+%macro IFUNC_RET 1
+    %ifidni %1, rax
+        ret
+    %else
+        mov     rax, %1
+        ret
+    %endif
+%endmacro
+
+%else
+
+%macro IFUNC_RET 1
+	jmp	%1
+%endmacro
+
+%endif
+
+; Try to detect a CPU feature, and if it is present, jump to .ret
+; 1 -> register used to store the implementation index
+; 2 -> index in the jump table
+; 3 -> cpu_info field
+; 4 -> field version
+; need a ret to jmp to
+%macro IFUNC_TRY_IMPL 4
+    mov %1, %2
+    HAS_CPU_FEAT %3, %4
+    jnz .ret
+%endmacro
