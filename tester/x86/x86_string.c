@@ -23,15 +23,16 @@ void x86_strlen_test() {
 int __strcmp_base(const char *s1, const char *s2);
 
 void x86_strcmp_test() {
-  test_entry entry[] = {TEST_ENTRY(BASE, strcmp), END_TEST_ENTRY};
+  test_entry entry[] = {TEST_ENTRY(BASE, strcmp),END_TEST_ENTRY};
 
   run_tests(entry, strcmp_test, x86_is_runable);
 }
 
 char *__strcpy_base(char *s1, char *s2);
+char *__strcpy_erms(char *s1, char *s2);
 
 void x86_strcpy_test() {
-  test_entry entry[] = {TEST_ENTRY(BASE, strcpy), END_TEST_ENTRY};
+  test_entry entry[] = {TEST_ENTRY(BASE, strcpy), TEST_ENTRY(ERMS, strcpy), END_TEST_ENTRY};
 
   run_tests(entry, strcpy_test, x86_is_runable);
 }

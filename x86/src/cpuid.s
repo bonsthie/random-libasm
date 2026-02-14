@@ -28,6 +28,7 @@ __get_cpu_feature:
 	cpuid
 	DETECT_CPU_FEAT	AVX, 2,	ebx
 	DETECT_CPU_FEAT	AVX512, F, ebx
+	DETECT_CPU_FEAT ERMS, 1 , ebx
 
 %ifdef VERBOSE
 	call __print_cpu_feature
@@ -43,6 +44,7 @@ __print_cpu_feature:
 	PRINT_HAS_CPU_FEAT AVX, 1
 	PRINT_HAS_CPU_FEAT AVX, 2
 	PRINT_HAS_CPU_FEAT AVX512, F
+	PRINT_HAS_CPU_FEAT ERMS, 1
 	ret
 
 ; void print_yes_or_no(bool yes);
@@ -72,6 +74,7 @@ STRING has_SSE4_2, "has sse4_2: "
 STRING has_AVX1, "has avx1: "
 STRING has_AVX2, "has avx2: "
 STRING has_AVX512F, "has avx512f: "
+STRING has_ERMS1, "has erms: "
 
 yes_msg:        db "yes", 10, 0
 yes_len         equ $ - yes_msg

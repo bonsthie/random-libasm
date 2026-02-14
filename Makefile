@@ -10,7 +10,7 @@ TEST_DIR=tester
 SRC=$(shell find $(SRC_DIR) -name '*.s')
 OBJ = $(patsubst $(SRC_DIR)/%.s, $(OBJ_DIR)/%.o, $(SRC))
 
-AS=nasm
+AS=/home/bonsthie/Documents/code/lib/nasm/nasm
 
 AS_FLAGS=-f elf64
 

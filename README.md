@@ -30,8 +30,14 @@ my first time writing nasm asm (i'm a clang kind of guy) and first time really w
     - [ ] avx2
     - [ ] avx512
 - [x] read
+    - [x] func
+    - [x] test
 - [x] write
+    - [x] func
+    - [x] test
 - [ ] strdup
+    - [x] func
+    - [ ] test
 
 
 ### AARCH64

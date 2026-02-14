@@ -21,3 +21,6 @@ __strcpy_base:
 	mov		byte [rdi], 0
 	ret
 	
+
+global ft_strcpy:weak
+ft_strcpy equ __strcpy_base

@@ -2,35 +2,33 @@ CC ?= clang
 CFLAGS ?= -O3 -march=native -g
 CFLAGS += -std=gnu11 -Wall -Wextra -fno-builtin
 
-SLIBC_INCLUDES = -I../include -I../lib/config -I../lib/libc/include
-
 BENCH_CFLAGS = $(CFLAGS) -D_GNU_SOURCE
-SLIBC_CFLAGS = $(CFLAGS) -msse4 -fno-builtin-strlen $(SLIBC_INCLUDES)
 
-SLIBC_SRC = ../lib/libc/src/string/strlen/strlen_simd.c
-WRAPPER_SRC = slibc_strlen_wrapper.c
-BENCH_SRC = strlen_bench.c
+LIBASM = ../libasm.a
 
-OBJS = strlen_bench.o slibc_strlen_wrapper.o strlen_simd.o
+BENCHES = strlen_bench strcpy_bench
 
-all: strlen_bench
+all: $(BENCHES)
 
-strlen_simd.o: $(SLIBC_SRC)
-	$(CC) $(SLIBC_CFLAGS) -c $< -o $@
-
-slibc_strlen_wrapper.o: $(WRAPPER_SRC)
-	$(CC) $(SLIBC_CFLAGS) -c $< -o $@
-
-strlen_bench.o: $(BENCH_SRC)
+strlen_bench.o: strlen_bench.c
 	$(CC) $(BENCH_CFLAGS) -c $< -o $@
 
-strlen_bench: $(OBJS)
+strlen_bench: strlen_bench.o $(LIBASM)
+	$(CC) $(LDFLAGS) $^ -o $@
+
+strcpy_bench.o: strcpy_bench.c
+	$(CC) $(BENCH_CFLAGS) -c $< -o $@
+
+strcpy_bench: strcpy_bench.o $(LIBASM)
 	$(CC) $(LDFLAGS) $^ -o $@
 
 run: strlen_bench
 	./strlen_bench
 
-clean:
-	rm -f *.o strlen_bench
+run_strcpy: strcpy_bench
+	./strcpy_bench
 
-.PHONY: all run clean
+clean:
+	rm -f *.o $(BENCHES)
+
+.PHONY: all run run_strcpy clean

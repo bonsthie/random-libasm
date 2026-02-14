@@ -13,6 +13,7 @@ struc cpu_info_s
 	.SSE resb 1
 	.AVX resb 1
 	.AVX512 resb 1
+	.ERMS	resb 1
 endstruc
 
 %define CPU_INFO(field) [rel __cpu_info + cpu_info_s.%+field]
@@ -32,6 +33,9 @@ endstruc
 %define CPU_INFO_BIT_AVX512F	(1)
 %define CPU_INFO_BIT_AVX512VL	(1 << 1)
 %define CPU_INFO_BIT_AVX512BW	(1 << 2)
+
+;; in CPU_INFO(erms)
+%define CPU_INFO_BIT_ERMS1	(1)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -60,7 +64,7 @@ endstruc
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; EBX bits
-%define CPUID_BIT_ERMS         (1 << 9)
+%define CPUID_BIT_ERMS1		   (1 << 9)
 %define CPUID_BIT_AVX2         (1 << 5)
 %define CPUID_BIT_AVX512F      (1 << 16)
 %define CPUID_BIT_AVX512DQ     (1 << 17)

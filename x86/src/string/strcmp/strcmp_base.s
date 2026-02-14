@@ -22,3 +22,5 @@ __strcmp_base:
 	ret
 	
 
+global ft_strcmp:weak
+ft_strcmp equ __strcmp_base

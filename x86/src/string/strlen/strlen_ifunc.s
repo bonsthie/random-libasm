@@ -12,10 +12,10 @@ extern __strlen_avx512:function
 
 global __strlen_ifunc:function
 __strlen_ifunc:
-    IFUNC_TRY_IMPL r11d, 0, AVX512, F
-    IFUNC_TRY_IMPL r11d, 1, AVX,    2
-    IFUNC_TRY_IMPL r11d, 2, SSE,    2
-    mov r11d, 3 ; default
+    IFUNC_TRY_IMPL	r11d, 0, AVX512, F
+    IFUNC_TRY_IMPL 	r11d, 1, AVX,    2
+    IFUNC_TRY_IMPL 	r11d, 2, SSE,    2
+    mov				r11d, 3 ; default
 
 .ret:
 	lea				rax, [rel __strlen_version_table]

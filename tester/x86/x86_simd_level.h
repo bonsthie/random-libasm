@@ -10,12 +10,16 @@ enum SIMD_LVL {
   SIMD_LVL_SSE4_2,
   SIMD_LVL_AVX2,
   SIMD_LVL_AVX512F,
+  SIMD_LVL_ERMS,
 };
 
 int x86_is_runable(int version);
 
 #define __STRINGIFY(x) #x
 #define _STRINGIFY(x) __STRINGIFY(x)
+
+#define F_ERMS(x) __##x##_erms
+#define F_ERMS_NAME(x) _STRINGIFY(F_ERMS(x))
 
 #define F_AVX512F(x) __##x##_avx512
 #define F_AVX512F_NAME(x) _STRINGIFY(F_AVX512F(x))
@@ -34,7 +38,6 @@ int x86_is_runable(int version);
 
 #define F_BASE(x) __##x##_base
 #define F_BASE_NAME(x) _STRINGIFY(F_BASE(x))
-
 
 #ifdef __cpuid
 #undef __cpuid
@@ -59,7 +62,6 @@ int x86_is_runable(int version);
                        : "=a"(*__eax), "=b"(*__ebx), "=c"(*__ecx),             \
                          "=d"(*__edx)                                          \
                        : "a"(__leaf), "c"(__count))
-
 
 static __inline int __get_cpuid__(uint32_t __leaf, uint32_t *__eax,
                                   uint32_t *__ebx, uint32_t *__ecx,
@@ -88,11 +90,11 @@ static __inline int __get_cpuid_count__(uint32_t __leaf, uint32_t __subleaf,
 #define Bit_AVX512CD (1 << 28)
 #define Bit_AVX512BW (1 << 30)
 #define Bit_AVX512VL (1 << 31)
+#define Bit_ERMS	(1 << 9)
 
 /* ecx */
 #define Bit_SSE3 (1 << 0)
 #define Bit_SSSE3 (1 << 9)
-#define Bit_ERMS (1 << 9)
 #define Bit_SSE4_1 (1 << 19)
 #define Bit_SSE4_2 (1 << 20)
 #define Bit_AVX (1 << 28)
@@ -103,28 +105,28 @@ static __inline int __get_cpuid_count__(uint32_t __leaf, uint32_t __subleaf,
 #define Bit_SSE2 (1 << 26)
 
 typedef union simd_support_u {
-    uint32_t cpu_id;
-    struct {
-        uint8_t mmx       : 1;
-        uint8_t sse       : 1;
-        uint8_t sse2      : 1;
-        uint8_t sse3      : 1;
-        uint8_t ssse3     : 1;
-        uint8_t sse41     : 1;
-        uint8_t sse42     : 1;
-        uint8_t avx       : 1;
-        uint8_t avx2      : 1;
-        uint8_t avx512f   : 1;
-        uint8_t avx512dq  : 1;
-        uint8_t avx512ifma: 1;
-        uint8_t avx512pf  : 1;
-        uint8_t avx512er  : 1;
-        uint8_t avx512cd  : 1;
-        uint8_t avx512bw  : 1;
-        uint8_t avx512vl  : 1;
-        uint8_t erms      : 1;
-        uint32_t padding  : 14;
-    };
+  uint32_t cpu_id;
+  struct {
+    uint8_t mmx : 1;
+    uint8_t sse : 1;
+    uint8_t sse2 : 1;
+    uint8_t sse3 : 1;
+    uint8_t ssse3 : 1;
+    uint8_t sse41 : 1;
+    uint8_t sse42 : 1;
+    uint8_t avx : 1;
+    uint8_t avx2 : 1;
+    uint8_t avx512f : 1;
+    uint8_t avx512dq : 1;
+    uint8_t avx512ifma : 1;
+    uint8_t avx512pf : 1;
+    uint8_t avx512er : 1;
+    uint8_t avx512cd : 1;
+    uint8_t avx512bw : 1;
+    uint8_t avx512vl : 1;
+    uint8_t erms : 1;
+    uint32_t padding : 14;
+  };
 } x86_simd_support_t;
 
 void __attribute__((constructor)) x86_init_simd_support(void);
