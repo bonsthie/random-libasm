@@ -1,4 +1,5 @@
 NAME=libasm.a
+LIBASM_PATH=$(shell realpath $(NAME))
 
 ARCH=x86
 
@@ -10,7 +11,7 @@ TEST_DIR=tester
 SRC=$(shell find $(SRC_DIR) -name '*.s')
 OBJ = $(patsubst $(SRC_DIR)/%.s, $(OBJ_DIR)/%.o, $(SRC))
 
-AS=/home/bonsthie/Documents/code/lib/nasm/nasm
+AS=nasm
 
 AS_FLAGS=-f elf64
 
@@ -41,9 +42,7 @@ fclean: clean
 re: fclean all
 
 test: $(NAME)
-	@make -C $(TEST_DIR) -s ARGS=$(ARGS)
-
-run_test:
-	@make run -C $(TEST_DIR) -s ARGS=$(ARGS)
+	@make -C $(TEST_DIR) -s ARGS=$(ARGS) \
+							LIBASM_PATH=$(LIBASM_PATH)
 
 .PHONY: all clean fclean re
