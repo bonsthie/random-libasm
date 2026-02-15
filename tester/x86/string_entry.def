@@ -3,4 +3,4 @@ GROUPS_ENTRY(string)
 ENTRY(strlen)
 ENTRY(strcmp)
 ENTRY(strcpy)
-
+ENTRY(strdup)

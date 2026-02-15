@@ -29,12 +29,20 @@ void x86_strcmp_test() {
 }
 
 char *__strcpy_base(char *s1, char *s2);
-char *__strcpy_erms(char *s1, char *s2);
 
 void x86_strcpy_test() {
-  test_entry entry[] = {TEST_ENTRY(BASE, strcpy), TEST_ENTRY(ERMS, strcpy), END_TEST_ENTRY};
+  test_entry entry[] = {TEST_ENTRY(BASE, strcpy), END_TEST_ENTRY};
 
   run_tests(entry, strcpy_test, x86_is_runable);
+}
+
+char *ft_strdup(const char *s);
+#define __strdup_base ft_strdup
+
+void x86_strdup_test() {
+  test_entry entry[] = {TEST_ENTRY(BASE, strdup), END_TEST_ENTRY};
+
+  run_tests(entry, strdup_test, x86_is_runable);
 }
 
 void x86_string_test() {

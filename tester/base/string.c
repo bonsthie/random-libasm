@@ -2,11 +2,56 @@
 #define _GNU_SOURCE
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
 #include <unistd.h>
 #include <test_template.h>
 #include <libasm_tester.h>
+
+static long run_strdup_case(strdup_proto func, const char *input,
+                            const char *expected) {
+  char *dup = func(input);
+  if (!dup)
+    return 0;
+
+  long ok = dup != input && strcmp(dup, expected) == 0;
+  free(dup);
+  return ok;
+}
+
+static long run_strdup_keeps_source_intact(strdup_proto func, char *input,
+                                           size_t len) {
+  char snapshot[64];
+  if (len > sizeof(snapshot))
+    len = sizeof(snapshot);
+  memcpy(snapshot, input, len);
+
+  char *dup = func(input);
+  if (!dup)
+    return 0;
+
+  dup[0] = (dup[0] == 'x') ? 'y' : 'x';
+  long ok = memcmp(snapshot, input, len) == 0;
+  free(dup);
+  return ok;
+}
+
+static long run_strdup_two_alloc_case(strdup_proto func, const char *input) {
+  char *dup1 = func(input);
+  char *dup2 = func(input);
+  if (!dup1 || !dup2) {
+    free(dup1);
+    free(dup2);
+    return 0;
+  }
+
+  long ok = dup1 != dup2 && dup1 != input && dup2 != input &&
+             strcmp(dup1, dup2) == 0;
+  free(dup1);
+  free(dup2);
+  return ok;
+}
 
 void strlen_page_overlap(strlen_proto strlen_tested) {
   size_t page = sysconf(_SC_PAGESIZE);
@@ -131,4 +176,39 @@ void strcpy_test(void *func) {
         BASIC_TEST("copy long string", strcmp, 0, buf, LONG_STR);
         #undef LONG_STR
     }
+}
+
+void strdup_test(void *func) {
+  strdup_proto strdup_tested = func;
+
+  BASIC_TEST("duplicate simple string", run_strdup_case, 1, strdup_tested,
+             "hello world", "hello world");
+
+  BASIC_TEST("duplicate empty string", run_strdup_case, 1, strdup_tested, "",
+             "");
+
+  BASIC_TEST("duplicate ascii punctuation", run_strdup_case, 1, strdup_tested,
+             "!@#$%^&*()_+", "!@#$%^&*()_+");
+
+  BASIC_TEST("duplicate long string", run_strdup_case, 1, strdup_tested,
+             STR_1000_a, STR_1000_a);
+
+  BASIC_TEST("duplicate very long string", run_strdup_case, 1, strdup_tested,
+             STR_10000_a, STR_10000_a);
+
+  BASIC_TEST("duplicate utf-8 content", run_strdup_case, 1, strdup_tested,
+             "😀éß", "😀éß");
+
+  char embedded_null[] = "abcxyz";
+  embedded_null[3] = '\0';
+  BASIC_TEST("stops at first null byte", run_strdup_case, 1, strdup_tested,
+             embedded_null, "abc");
+
+  char mutable_src[] = "mutable buffer";
+  BASIC_TEST("result is independent from source",
+             run_strdup_keeps_source_intact, 1, strdup_tested, mutable_src,
+             sizeof(mutable_src));
+
+  BASIC_TEST("distinct buffers on consecutive calls",
+             run_strdup_two_alloc_case, 1, strdup_tested, "duplicate twice");
 }

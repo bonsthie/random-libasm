@@ -51,6 +51,9 @@ void strcmp_test(void *func);
 typedef char *(*strcpy_proto)(char *dst, const char *src);
 void strcpy_test(void *func);
 
+typedef char *(*strdup_proto)(const char *src);
+void strdup_test(void *func);
+
 typedef ssize_t (*write_proto)(int fildes, const void *buf, size_t nbyte);
 void write_test(void *func);
 

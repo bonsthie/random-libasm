@@ -1,12 +1,12 @@
 NAME=libasm_tester
 
 ARCH ?= x86
-LIBASM_PATH ?= ../libasm.a
+LIBASM_PATH ?= ../libasm.a 
 OBJ_DIR=obj
 SRC=$(shell find base $(ARCH) -name '*.c')
 OBJ = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
 CC = clang
-CFLAG=-Wall -Wextra -Werror -O0 -g
+CFLAG=-Wall -Wextra -Werror -O0 -g -MMD -MP 
 INC=-I include
 
 all : $(NAME) run
@@ -27,5 +27,7 @@ clean:
 
 fclean: clean
 	rm $(NAME)
+
+-include $(OBJ:.o=.d)
 
 re: fclean all run
