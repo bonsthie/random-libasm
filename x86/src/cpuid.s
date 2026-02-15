@@ -62,8 +62,7 @@ __print_yes_or_no:
 
 .end:
 	mov		edi, 1
-	call ft_write
-	ret
+	jmp ft_write
 
 
 section .rodata
