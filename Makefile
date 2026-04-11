@@ -15,8 +15,8 @@ AS=nasm
 
 AS_FLAGS=-f elf64
 
-ifeq ($(ENABLE_IFUNC), true)
-	AS_FLAGS += -D__IFUNC_ENABLE
+ifeq ($(ENABLE_IFUNC), false)
+	AS_FLAGS += -D__IFUNC_DISABLE
 endif
 
 ifeq ($(VERBOSE), true)
