@@ -5,7 +5,7 @@ global __strlen_avx2:hidden
 %define PAGE_SIZE 4096
 %define VEC_SIZE 32
 
-; size_t __strlen_base(const char *str)
+; size_t __strlen_avx2(const char *str)
 ; str -> rdi
 __strlen_avx2:
 	mov			rax, rdi					; rax = endptr
