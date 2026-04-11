@@ -7,7 +7,7 @@ my first time writing nasm asm (i'm a clang kind of guy) and first time really w
 ### X86-64
 - [x] tester
 - [x] cpuid info in .init_array
-- [x] ifunc selector (fork of nasm is curently evalueted)
+- [x] ifunc selector (fork of nasm is merge [hehe](https://github.com/netwide-assembler/nasm/pull/177#event-24359750018) minimum nasm version `3.02rc6`)
 - [ ] strlen
     - [x] test
     - [ ] ifunc
