@@ -121,6 +121,12 @@ endstruc
 %1%+_len	equ $ - %1
 %endmacro
 
+%ifndef __IFUNC_DISABLE
+	%if __NASM_VERSION_ID__ >= 0x03016360
+		%define __IFUNC_ENABLE
+	%endif
+%endif
+
 
 ; if there is ifunc in this version of nasm
 ;	this ret the func version
